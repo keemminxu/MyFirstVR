@@ -45,4 +45,17 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
 	class USkeletalMeshComponent* rightHand;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+	class UTextRenderComponent* leftLog;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+	class UTextRenderComponent* rightLog;
+
+
+private:
+	void Fire1();
+	void Fire2();
+	void HorizontalMove(float value);
+	void VerticalMove(float value);
 };

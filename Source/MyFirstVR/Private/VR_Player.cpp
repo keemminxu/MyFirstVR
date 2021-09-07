@@ -8,6 +8,7 @@
 #include "MotionControllerComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/TextRenderComponent.h"
 
 AVR_Player::AVR_Player()
 {
@@ -46,6 +47,28 @@ AVR_Player::AVR_Player()
 	rightHand->SetupAttachment(rightController);
 	rightHand->SetRelativeRotation(FRotator(0, 0, 90.0f));
 
+	// 3D 텍스트 컴포넌트를 손목 위에 붙이기
+	leftLog = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Left Log"));
+	leftLog->SetupAttachment(leftController);
+	// 글씨 크기
+	leftLog->SetWorldSize(20);
+	// 글씨 정렬(가운데 정렬)
+	leftLog->SetHorizontalAlignment(EHTA_Center);
+	leftLog->SetVerticalAlignment(EVRTA_TextCenter);
+	// 글씨 색상
+	leftLog->SetTextRenderColor(FColor::Yellow);
+	leftLog->SetRelativeRotation(FRotator(0, 180.0f, 0));
+	leftLog->SetRelativeLocation(FVector(0, 0, 40.f));
+
+	rightLog = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Right Log"));
+	rightLog->SetupAttachment(rightController);
+	rightLog->SetWorldSize(20);
+	rightLog->SetHorizontalAlignment(EHTA_Center);
+	rightLog->SetVerticalAlignment(EVRTA_TextCenter);
+	rightLog->SetTextRenderColor(FColor::Yellow);
+	rightLog->SetRelativeRotation(FRotator(0, 180.0f, 0));
+	rightLog->SetRelativeLocation(FVector(0, 0, 40.f));
+
 	// 플레이어 컨트롤러 빙의
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
@@ -66,5 +89,42 @@ void AVR_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	// 액션 바인딩
+	PlayerInputComponent->BindAction("RightTrigger", IE_Pressed, this, &AVR_Player::Fire1);
+	PlayerInputComponent->BindAction("RightGrip", IE_Pressed, this, &AVR_Player::Fire2);
+
+	// 엑시스 바인딩
+	PlayerInputComponent->BindAxis("LeftThumbstick_X", this, &AVR_Player::HorizontalMove);
+	PlayerInputComponent->BindAxis("LeftThumbstick_Y", this, &AVR_Player::VerticalMove);
+}
+
+void AVR_Player::Fire1()
+{
+	rightLog->SetText(FText::FromString("Trigger R"));
+}
+
+void AVR_Player::Fire2()
+{
+	rightLog->SetText(FText::FromString("Grip!!"));
+}
+
+void AVR_Player::HorizontalMove(float value)
+{
+	FString stickValue = FString::Printf(TEXT("x: %f"), value);
+	leftLog->SetText(FText::FromString(stickValue));
+}
+
+void AVR_Player::VerticalMove(float value)
+{
+	// thumbstick의 y축 값
+	FString stickValue = FString::Printf(TEXT("\r\ny: %f"), value);
+	// 왼손 로그에 원래 있던 글씨
+	FText curText = leftLog->Text;
+	// 글자 사이에 들어갈 문자
+	FText interMission = FText::FromString(", ");
+	// 글자 합치기
+	FText resultText = FText::Join(interMission, curText, FText::FromString(stickValue));
+
+	leftLog->SetText(resultText);
 }
 
