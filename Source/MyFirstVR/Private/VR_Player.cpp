@@ -9,6 +9,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "MoveActorComponent.h"
+#include "HeadMountedDisplayFunctionLibrary.h"
 
 AVR_Player::AVR_Player()
 {
@@ -69,6 +71,9 @@ AVR_Player::AVR_Player()
 	rightLog->SetRelativeRotation(FRotator(0, 180.0f, 0));
 	rightLog->SetRelativeLocation(FVector(0, 0, 40.f));
 
+	moveComp = CreateDefaultSubobject<UMoveActorComponent>(TEXT("MoveComponent"));
+
+
 	// 플레이어 컨트롤러 빙의
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
@@ -77,6 +82,14 @@ void AVR_Player::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// 헤드 마운트 디스플레이 장치의 초기 위치값을 변수에 저장하기
+	UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(hmdRotate, hmdLocation);
+
+	// HMD 장치의 기준점을 바닥으로 설정하기
+	UHeadMountedDisplayFunctionLibrary::SetTrackingOrigin(EHMDTrackingOrigin::Floor);
+
+	// HMD 장치의 위치를 초기화하기
+	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition(hmdRotate, hmdLocation);
 }
 
 void AVR_Player::Tick(float DeltaTime)
@@ -89,13 +102,15 @@ void AVR_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	moveComp->SetupPlayerInputComponent(PlayerInputComponent);
+
 	// 액션 바인딩
-	PlayerInputComponent->BindAction("RightTrigger", IE_Pressed, this, &AVR_Player::Fire1);
-	PlayerInputComponent->BindAction("RightGrip", IE_Pressed, this, &AVR_Player::Fire2);
+	//PlayerInputComponent->BindAction("RightTrigger", IE_Pressed, this, &AVR_Player::Fire1);
+	//PlayerInputComponent->BindAction("RightGrip", IE_Pressed, this, &AVR_Player::Fire2);
 
 	// 엑시스 바인딩
-	PlayerInputComponent->BindAxis("LeftThumbstick_X", this, &AVR_Player::HorizontalMove);
-	PlayerInputComponent->BindAxis("LeftThumbstick_Y", this, &AVR_Player::VerticalMove);
+	//PlayerInputComponent->BindAxis("LeftThumbstick_X", this, &AVR_Player::HorizontalMove);
+	//PlayerInputComponent->BindAxis("LeftThumbstick_Y", this, &AVR_Player::VerticalMove);
 }
 
 void AVR_Player::Fire1()

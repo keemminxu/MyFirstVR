@@ -52,10 +52,16 @@ public:
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
 	class UTextRenderComponent* rightLog;
 
+	// 액터 컴포넌트들 추가하기
+	UPROPERTY(VisibleAnywhere, Category = PlayerSettings)
+	class UMoveActorComponent* moveComp;
 
 private:
 	void Fire1();
 	void Fire2();
 	void HorizontalMove(float value);
 	void VerticalMove(float value);
+
+	FRotator hmdRotate;
+	FVector hmdLocation;
 };
