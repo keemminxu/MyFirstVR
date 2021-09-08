@@ -27,7 +27,7 @@ AVR_Player::AVR_Player()
 
 	cameraRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Camera Root"));
 	cameraRoot->SetupAttachment(RootComponent);
-	cameraRoot->SetRelativeLocation(FVector(0, 0, 40.0f));
+	cameraRoot->SetRelativeLocation(FVector(0, 0, 30.0f));
 
 	playerCam = CreateDefaultSubobject<UCameraComponent>(TEXT("MainCamera"));
 	playerCam->SetupAttachment(cameraRoot);
@@ -82,14 +82,14 @@ void AVR_Player::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	// 헤드 마운트 디스플레이 장치의 초기 위치값을 변수에 저장하기
+	// 헤드 마운트 디스플레이 장치의 초기 위치값을 설정하기
 	UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(hmdRotate, hmdLocation);
 
 	// HMD 장치의 기준점을 바닥으로 설정하기
-	UHeadMountedDisplayFunctionLibrary::SetTrackingOrigin(EHMDTrackingOrigin::Floor);
+	UHeadMountedDisplayFunctionLibrary::SetTrackingOrigin(EHMDTrackingOrigin::Eye);
 
 	// HMD 장치의 위치를 초기화하기
-	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition(hmdRotate, hmdLocation);
+	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
 }
 
 void AVR_Player::Tick(float DeltaTime)
@@ -103,6 +103,9 @@ void AVR_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	moveComp->SetupPlayerInputComponent(PlayerInputComponent);
+
+
+	PlayerInputComponent->BindAction("HMDReset", IE_Pressed, this, &AVR_Player::ResetHMD);
 
 	// 액션 바인딩
 	//PlayerInputComponent->BindAction("RightTrigger", IE_Pressed, this, &AVR_Player::Fire1);
@@ -143,3 +146,7 @@ void AVR_Player::VerticalMove(float value)
 	leftLog->SetText(resultText);
 }
 
+void AVR_Player::ResetHMD()
+{
+	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
+}

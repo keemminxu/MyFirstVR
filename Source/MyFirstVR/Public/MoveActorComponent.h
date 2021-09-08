@@ -28,11 +28,21 @@ public:
 	UPROPERTY(EditAnywhere, Category = MoveSettings)
 	float rotateSpeed = 200.f;
 
+	UPROPERTY(EditAnywhere, Category = MoveSettings)
+	FVector simulDirection = FVector(100, 0, 100);
+
+	UPROPERTY(EditAnywhere, Category = MoveSettings)
+	float shootPower = 10.f;
+
 private:
 	void MoveHorizontal(float value);
 	void MoveVertical(float value);
 	void RotateHorizontal(float value);
+	void DrawTrajectory();
+	void ShowLine();
+	void HideLine();
 
 	class AVR_Player* player;
 
+	bool bIsShowingLine = false;
 };
