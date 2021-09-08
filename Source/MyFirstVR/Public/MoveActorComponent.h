@@ -34,6 +34,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = MoveSettings)
 	float shootPower = 10.f;
 
+	UPROPERTY(EditAnywhere, Category = MoveSettings)
+	TSubclassOf<class ATestBallActor> testBall;
+
 private:
 	void MoveHorizontal(float value);
 	void MoveVertical(float value);
@@ -41,8 +44,11 @@ private:
 	void DrawTrajectory();
 	void ShowLine();
 	void HideLine();
+	void ShootBall();
+	void TeleportMySelf();
 
 	class AVR_Player* player;
 
 	bool bIsShowingLine = false;
+	FVector teleportLocation;
 };

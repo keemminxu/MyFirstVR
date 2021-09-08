@@ -20,6 +20,7 @@ AVR_Player::AVR_Player()
 	SetRootComponent(capsuleComp);
 	capsuleComp->SetCapsuleHalfHeight(65.0f);
 	capsuleComp->SetCapsuleRadius(40.0f);
+	capsuleComp->SetCollisionProfileName(TEXT("VR_Player"));
 
 	bodyComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMesh"));
 	bodyComp->SetupAttachment(RootComponent);

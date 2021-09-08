@@ -5,6 +5,10 @@
 #include "VR_Player.h"
 #include "MotionControllerComponent.h"
 #include "DrawDebugHelpers.h"
+#include "TestBallActor.h"
+#include "Components/SphereComponent.h"
+#include "Components/TextRenderComponent.h"
+#include "Components/CapsuleComponent.h"
 
 UMoveActorComponent::UMoveActorComponent()
 {
@@ -40,6 +44,8 @@ void UMoveActorComponent::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	PlayerInputComponent->BindAxis("LeftThumbstick_X", this, &UMoveActorComponent::RotateHorizontal);
 	PlayerInputComponent->BindAction("LeftGrip", IE_Pressed, this, &UMoveActorComponent::ShowLine);
 	PlayerInputComponent->BindAction("LeftGrip", IE_Released, this, &UMoveActorComponent::HideLine);
+	//PlayerInputComponent->BindAction("LeftTrigger", IE_Pressed, this, &UMoveActorComponent::ShootBall);
+	PlayerInputComponent->BindAction("LeftTrigger", IE_Pressed, this, &UMoveActorComponent::TeleportMySelf);
 }
 
 void UMoveActorComponent::MoveHorizontal(float value)
@@ -104,6 +110,28 @@ void UMoveActorComponent::DrawTrajectory()
 
 		FVector predictPosition = starPos + FVector(xPos, yPos,zPos);
 
+		// 직전 위치 ~ 예측 지점 사이에 차폐물이 있는지를 검사한다.
+		// 만일, 차폐물이 있다면 그 부딪힌 지점을 배열에 추가하고 반복문을 종료시킨다.
+		if (i > 0)
+		{
+			FHitResult hitInfo;
+			FCollisionObjectQueryParams objParams;
+			objParams.AddObjectTypesToQuery(ECC_WorldStatic);
+
+			FCollisionQueryParams params;
+			params.AddIgnoredActor(player);
+
+			// 라인 트레이스 발사!
+			if (GetWorld()->LineTraceSingleByObjectType(hitInfo, linePosition[i - 1], predictPosition, objParams, params))
+			{
+				linePosition.Add(hitInfo.ImpactPoint);
+				player->leftLog->SetText(FText::FromString(hitInfo.GetActor()->GetName()));
+				teleportLocation = hitInfo.ImpactPoint;
+				teleportLocation.Z += player->capsuleComp->GetScaledCapsuleHalfHeight();
+				break;
+			}
+		}
+
 		// 예측 지점을 배열에 추가한다.
 		linePosition.Add(predictPosition);
 	}
@@ -123,4 +151,32 @@ void UMoveActorComponent::ShowLine()
 void UMoveActorComponent::HideLine()
 {
 	bIsShowingLine = false;
+}
+
+void UMoveActorComponent::ShootBall()
+{
+	if (testBall != nullptr)
+	{
+		FActorSpawnParameters params;
+		params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		// 볼 생성하기
+		ATestBallActor* myBall = GetWorld()->SpawnActor<ATestBallActor>(testBall, player->leftController->GetComponentLocation(), player->leftController->GetComponentRotation(), params);
+
+		// 볼을 발사하기
+		myBall->sphereComp->SetSimulatePhysics(true);
+
+		FVector shootDir = simulDirection * shootPower;
+		shootDir = player->leftController->GetComponentTransform().TransformVectorNoScale(shootDir);
+		myBall->sphereComp->AddImpulse(shootDir);
+	}
+}
+
+void UMoveActorComponent::TeleportMySelf()
+{
+	// 내가 그립 버튼을 눌러서 라인을 그리고 있는 상황이라면...
+	if (bIsShowingLine)
+	{
+		player->SetActorLocation(teleportLocation, true);
+	}
 }
