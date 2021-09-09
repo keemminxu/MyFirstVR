@@ -6,6 +6,13 @@
 #include "Components/ActorComponent.h"
 #include "GrabActorComponent.generated.h"
 
+UENUM()
+enum class EGrabType : uint8
+{
+	EGT_LineType UMETA(DisplayName ="LineType"),
+	EGT_SweepType UMETA(DisplayName = "SweepType"),
+};
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MYFIRSTVR_API UGrabActorComponent : public UActorComponent
@@ -26,15 +33,19 @@ public:
 	UPROPERTY(EditAnywhere, Category = GrabSettings)
 	float grabDistance = 1000.f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GrabSettings)
+	EGrabType myGrabType = EGrabType::EGT_LineType;
+
 private:
 	void ShowGrabLine();
 	void HideGrabLine();
 	void DrawGrabLine();
 	void GrabAction();
+	void ReleaseAction();
 
 	bool bIsShowing = false;
 	class APickUpActor* pickObject;
 	class AVR_Player* player;
-
+	FHitResult grabObject;
 	
 };

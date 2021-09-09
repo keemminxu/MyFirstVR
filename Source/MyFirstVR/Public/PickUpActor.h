@@ -25,4 +25,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = PickUPSettings)
 	class UStaticMeshComponent* meshComp;
+
+	UPROPERTY(EditAnywhere, Category = PickUPSettings)
+	FVector grabOffset;
 };
