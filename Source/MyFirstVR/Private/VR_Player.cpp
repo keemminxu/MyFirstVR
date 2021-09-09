@@ -11,6 +11,8 @@
 #include "Components/TextRenderComponent.h"
 #include "MoveActorComponent.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
+#include "HandActorComponent.h"
+#include "GrabActorComponent.h"
 
 AVR_Player::AVR_Player()
 {
@@ -72,8 +74,10 @@ AVR_Player::AVR_Player()
 	rightLog->SetRelativeRotation(FRotator(0, 180.0f, 0));
 	rightLog->SetRelativeLocation(FVector(0, 0, 40.f));
 
+	// 액터 컴포넌트들
 	moveComp = CreateDefaultSubobject<UMoveActorComponent>(TEXT("MoveComponent"));
-
+	handComp = CreateDefaultSubobject<UHandActorComponent>(TEXT("HandComponent"));
+	grabComp = CreateDefaultSubobject<UGrabActorComponent>(TEXT("GrabComponent"));
 
 	// 플레이어 컨트롤러 빙의
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
@@ -104,7 +108,7 @@ void AVR_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	moveComp->SetupPlayerInputComponent(PlayerInputComponent);
-
+	grabComp->SetupPlayerInputComponent(PlayerInputComponent);
 
 	PlayerInputComponent->BindAction("HMDReset", IE_Pressed, this, &AVR_Player::ResetHMD);
 

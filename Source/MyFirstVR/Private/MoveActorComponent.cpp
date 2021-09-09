@@ -9,7 +9,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "VRHandAnimInstance.h"
+#include "HandActorComponent.h"
 
 UMoveActorComponent::UMoveActorComponent()
 {
@@ -136,18 +136,7 @@ void UMoveActorComponent::DrawTrajectory()
 		// 예측 지점을 배열에 추가한다.
 		linePosition.Add(predictPosition);
 
-		// 손을 쥐는 애니메이션을 실행한다.
-		UVRHandAnimInstance* handAnim = Cast<UVRHandAnimInstance>(player->leftHand->GetAnimInstance());
-
-		if (handAnim)
-		{
-			player->leftLog->SetText(FText::FromString("anim exist"));
-			handAnim->gripValue = 1.0f;
-		}
-		else
-		{
-			player->leftLog->SetText(FText::FromString("anim not exist"));
-		}
+		
 
 	}
 
@@ -161,11 +150,17 @@ void UMoveActorComponent::DrawTrajectory()
 void UMoveActorComponent::ShowLine()
 {
 	bIsShowingLine = true;
+
+	// 손을 쥐는 애니메이션을 실행한다.
+	player->handComp->targetGripValueLeft = 1.0f;
 }
 
 void UMoveActorComponent::HideLine()
 {
 	bIsShowingLine = false;
+
+	// 손을 펴는 애니메이션을 실행한다.
+    player->handComp->targetGripValueLeft = 0;
 }
 
 void UMoveActorComponent::ShootBall()

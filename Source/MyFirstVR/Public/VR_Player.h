@@ -56,6 +56,12 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = PlayerSettings)
 	class UMoveActorComponent* moveComp;
 
+	UPROPERTY(VisibleAnywhere, Category = PlayerSettings)
+	class UHandActorComponent* handComp;
+
+	UPROPERTY(VisibleAnywhere, Category = PlayerSettings)
+	class UGrabActorComponent* grabComp;
+
 private:
 	void Fire1();
 	void Fire2();
