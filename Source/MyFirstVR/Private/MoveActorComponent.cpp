@@ -9,6 +9,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "VRHandAnimInstance.h"
 
 UMoveActorComponent::UMoveActorComponent()
 {
@@ -125,7 +126,7 @@ void UMoveActorComponent::DrawTrajectory()
 			if (GetWorld()->LineTraceSingleByObjectType(hitInfo, linePosition[i - 1], predictPosition, objParams, params))
 			{
 				linePosition.Add(hitInfo.ImpactPoint);
-				player->leftLog->SetText(FText::FromString(hitInfo.GetActor()->GetName()));
+				//player->leftLog->SetText(FText::FromString(hitInfo.GetActor()->GetName()));
 				teleportLocation = hitInfo.ImpactPoint;
 				teleportLocation.Z += player->capsuleComp->GetScaledCapsuleHalfHeight();
 				break;
@@ -134,6 +135,20 @@ void UMoveActorComponent::DrawTrajectory()
 
 		// 예측 지점을 배열에 추가한다.
 		linePosition.Add(predictPosition);
+
+		// 손을 쥐는 애니메이션을 실행한다.
+		UVRHandAnimInstance* handAnim = Cast<UVRHandAnimInstance>(player->leftHand->GetAnimInstance());
+
+		if (handAnim)
+		{
+			player->leftLog->SetText(FText::FromString("anim exist"));
+			handAnim->gripValue = 1.0f;
+		}
+		else
+		{
+			player->leftLog->SetText(FText::FromString("anim not exist"));
+		}
+
 	}
 
 	// 예측 배열에 맞춰 라인 그리기
@@ -177,6 +192,18 @@ void UMoveActorComponent::TeleportMySelf()
 	// 내가 그립 버튼을 눌러서 라인을 그리고 있는 상황이라면...
 	if (bIsShowingLine)
 	{
-		player->SetActorLocation(teleportLocation, true);
+		// 카메라를 페이드 인 -> 페이드 아웃시킨다.
+		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->StartCameraFade(0, 1, 0.5f, FLinearColor::Black);
+
+		// 카메라 페이드가 끝나는 시점에 맞춰서 이동한다.
+		if (teleportLocation != FVector::ZeroVector)
+		{
+			player->GetWorldTimerManager().SetTimer(teleportTimer, this, &UMoveActorComponent::MoveTeleportLocation, 0.5f, false);
+		}
 	}
+}
+
+void UMoveActorComponent::MoveTeleportLocation()
+{
+	player->SetActorLocation(teleportLocation, false);
 }

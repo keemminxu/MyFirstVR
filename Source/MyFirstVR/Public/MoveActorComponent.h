@@ -46,9 +46,12 @@ private:
 	void HideLine();
 	void ShootBall();
 	void TeleportMySelf();
+	void MoveTeleportLocation();
 
 	class AVR_Player* player;
 
 	bool bIsShowingLine = false;
 	FVector teleportLocation;
+
+	FTimerHandle teleportTimer;
 };
