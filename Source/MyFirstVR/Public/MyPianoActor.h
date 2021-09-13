@@ -12,15 +12,20 @@ class MYFIRSTVR_API AMyPianoActor : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	AMyPianoActor();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	//virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere, Category = KeySettings)
+	class USceneComponent* rootComp;
+
+	UPROPERTY(EditAnywhere, Category = KeySettings)
+	TArray<class UChildActorComponent*> pianoKeyArray;
+
+	UPROPERTY(EditAnywhere, Category = KeySettings)
+	int32 keyCount = 8;
 };
