@@ -20,10 +20,10 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = VideoSettings)
+	UPROPERTY(EditAnywhere, Category = VideoSettings)
 	class UMediaPlayer* mediaPlayer;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = VideoSettings)
+	UPROPERTY(EditAnywhere, Category = VideoSettings)
 	class UMediaSource* mysource;
 
 	UPROPERTY(EditAnywhere, Category = VideoSettings)
@@ -31,6 +31,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = VideoSettings)
 	class UStaticMeshComponent* screenMesh;
+
+	UPROPERTY(EditAnywhere, Category = VideoSettings)
+	class UMediaSoundComponent* soundComp;
 
 	void PlayVideo(UMediaSource* playSource);
 };

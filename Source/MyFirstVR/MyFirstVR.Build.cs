@@ -8,7 +8,7 @@ public class MyFirstVR : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "MediaAssets" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "MediaAssets", "UMG", "SlateCore" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "HeadMountedDisplay" });
 		// Uncomment if you are using Slate UI
