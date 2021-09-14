@@ -14,7 +14,7 @@ class MYFIRSTVR_API UButtonWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
-	public:
+public:
 
 	virtual void NativeConstruct() override;
 
@@ -26,6 +26,8 @@ class MYFIRSTVR_API UButtonWidget : public UUserWidget
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* btn_forward;
+
+	class AMyVideoActor* videoActor;
 
 private:
 	UFUNCTION()

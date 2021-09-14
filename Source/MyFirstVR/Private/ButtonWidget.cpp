@@ -3,6 +3,7 @@
 
 #include "ButtonWidget.h"
 #include "Components/Button.h"
+#include "MyVideoActor.h"
 
 void UButtonWidget::NativeConstruct()
 {
@@ -16,15 +17,24 @@ void UButtonWidget::NativeConstruct()
 
 void UButtonWidget::MediaPlay()
 {
-
+	if (videoActor)
+	{
+		videoActor->PlayVideo();
+	}
 }
 
 void UButtonWidget::MediaBack()
 {
-
+	if (videoActor)
+	{
+		videoActor->BackVideo();
+	}
 }
 
 void UButtonWidget::MediaForward()
 {
-
+	if (videoActor)
+	{
+		videoActor->ForwardVideo();
+	}
 }

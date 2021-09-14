@@ -13,6 +13,8 @@
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "HandActorComponent.h"
 #include "GrabActorComponent.h"
+#include "VRMovieComponent.h"
+#include "Components/WidgetInteractionComponent.h"
 
 AVR_Player::AVR_Player()
 {
@@ -52,6 +54,9 @@ AVR_Player::AVR_Player()
 	rightHand->SetupAttachment(rightController);
 	rightHand->SetRelativeRotation(FRotator(0, 0, 90.0f));
 
+	widgetPointer = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("Widget Pointer"));
+	widgetPointer->SetupAttachment(rightController);
+
 	// 3D 텍스트 컴포넌트를 손목 위에 붙이기
 	leftLog = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Left Log"));
 	leftLog->SetupAttachment(leftController);
@@ -78,6 +83,7 @@ AVR_Player::AVR_Player()
 	moveComp = CreateDefaultSubobject<UMoveActorComponent>(TEXT("MoveComponent"));
 	handComp = CreateDefaultSubobject<UHandActorComponent>(TEXT("HandComponent"));
 	grabComp = CreateDefaultSubobject<UGrabActorComponent>(TEXT("GrabComponent"));
+	movieComp = CreateDefaultSubobject<UVRMovieComponent>(TEXT("MovieComponent"));
 
 	// 플레이어 컨트롤러 빙의
 	AutoPossessPlayer = EAutoReceiveInput::Player0;

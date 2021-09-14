@@ -35,5 +35,10 @@ public:
 	UPROPERTY(EditAnywhere, Category = VideoSettings)
 	class UMediaSoundComponent* soundComp;
 
-	void PlayVideo(UMediaSource* playSource);
+	UPROPERTY(EditAnywhere, Category = VideoSettings)
+	class UWidgetComponent* buttonWidgetComp;
+
+	void PlayVideo();
+	void BackVideo();
+	void ForwardVideo();
 };
