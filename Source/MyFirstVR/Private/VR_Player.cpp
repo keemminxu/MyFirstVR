@@ -15,6 +15,7 @@
 #include "GrabActorComponent.h"
 #include "VRMovieComponent.h"
 #include "Components/WidgetInteractionComponent.h"
+#include "VRGazeComponent.h"
 
 AVR_Player::AVR_Player()
 {
@@ -36,6 +37,11 @@ AVR_Player::AVR_Player()
 
 	playerCam = CreateDefaultSubobject<UCameraComponent>(TEXT("MainCamera"));
 	playerCam->SetupAttachment(cameraRoot);
+
+	gazePointer = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Gaze Pointer"));
+	gazePointer->SetupAttachment(playerCam);
+	gazePointer->SetRelativeLocation(playerCam->GetForwardVector() * 200);
+	gazePointer->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	leftController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("LeftMotionController"));
 	leftController->SetupAttachment(cameraRoot);
@@ -84,6 +90,7 @@ AVR_Player::AVR_Player()
 	handComp = CreateDefaultSubobject<UHandActorComponent>(TEXT("HandComponent"));
 	grabComp = CreateDefaultSubobject<UGrabActorComponent>(TEXT("GrabComponent"));
 	movieComp = CreateDefaultSubobject<UVRMovieComponent>(TEXT("MovieComponent"));
+	gazeComp = CreateDefaultSubobject<UVRGazeComponent>(TEXT("GazeComponent"));
 
 	// 플레이어 컨트롤러 빙의
 	AutoPossessPlayer = EAutoReceiveInput::Player0;

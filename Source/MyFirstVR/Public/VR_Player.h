@@ -55,6 +55,10 @@ public:
 	UPROPERTY(EditAnywhere, Category = VideoInteractions)
 	class UWidgetInteractionComponent* widgetPointer;
 
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+	class UStaticMeshComponent* gazePointer;
+
+
 	// 액터 컴포넌트들 추가하기
 	UPROPERTY(VisibleAnywhere, Category = PlayerSettings)
 	class UMoveActorComponent* moveComp;
@@ -67,6 +71,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = PlayerSettings)
 	class UVRMovieComponent* movieComp;
+
+	UPROPERTY(VisibleAnywhere, Category = PlayerSettings)
+	class UVRGazeComponent* gazeComp;
 
 private:
 	void Fire1();
