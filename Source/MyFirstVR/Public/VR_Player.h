@@ -75,6 +75,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = PlayerSettings)
 	class UVRGazeComponent* gazeComp;
 
+	UPROPERTY(VisibleAnywhere, Category = PlayerSettings)
+	class UVRClimbComponent* climbComp;
+
 private:
 	void Fire1();
 	void Fire2();

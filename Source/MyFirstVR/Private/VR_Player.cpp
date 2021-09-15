@@ -16,6 +16,7 @@
 #include "VRMovieComponent.h"
 #include "Components/WidgetInteractionComponent.h"
 #include "VRGazeComponent.h"
+#include "VRClimbComponent.h"
 
 AVR_Player::AVR_Player()
 {
@@ -91,6 +92,7 @@ AVR_Player::AVR_Player()
 	grabComp = CreateDefaultSubobject<UGrabActorComponent>(TEXT("GrabComponent"));
 	movieComp = CreateDefaultSubobject<UVRMovieComponent>(TEXT("MovieComponent"));
 	gazeComp = CreateDefaultSubobject<UVRGazeComponent>(TEXT("GazeComponent"));
+	climbComp = CreateDefaultSubobject<UVRClimbComponent>(TEXT("ClimbComponent"));
 
 	// 플레이어 컨트롤러 빙의
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
@@ -120,9 +122,11 @@ void AVR_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	// 입력 값을 각 액터 컴포넌트에게 전달하기
 	moveComp->SetupPlayerInputComponent(PlayerInputComponent);
 	grabComp->SetupPlayerInputComponent(PlayerInputComponent);
 	movieComp->SetupPlayerInputComponent(PlayerInputComponent);
+	climbComp->SetupPlayerInputComponent(PlayerInputComponent);
 
 	PlayerInputComponent->BindAction("HMDReset", IE_Pressed, this, &AVR_Player::ResetHMD);
 
