@@ -45,6 +45,7 @@ void AMyVRCharacter::BeginPlay()
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
 
 	anim = Cast<UVRCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+
 }
 
 void AMyVRCharacter::Tick(float DeltaTime)

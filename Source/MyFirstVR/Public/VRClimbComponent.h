@@ -24,12 +24,17 @@ public:
 	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent);
 	
 private:
-	bool bCanClimbing_Left = true;
+	bool bCanClimbing_Left = false;
 	bool bIsClimbing_Left = false;
+	bool bCanClimbing_Right = false;
+	bool bIsClimbing_Right = false;
 
-	void StartClimbing();
-	void EndClimbing();
+	void StartClimbingLeft();
+	void EndClimbingLeft();
+	void StartClimbingRight();
+	void EndClimbingRight();
 
 	class AVR_Player* player;
 	FVector startClimbingPos_Left;
+	FVector startClimbingPos_Right;
 };
